@@ -23,13 +23,17 @@
 # Use is subject to license terms.
 #
 
+#
+# Copyright (c) 2012 by Delphix. All rights reserved.
+#
+
 . $STF_SUITE/include/libtest.kshlib
 . $STF_SUITE/tests/functional/xattr/xattr_common.kshlib
 
 #
 # DESCRIPTION:
 # xattr file sizes count towards normal disk usage
-# 
+#
 # STRATEGY:
 #	1. Create a file, and check pool and filesystem usage
 #       2. Create a 200mb xattr in that file
@@ -41,15 +45,15 @@ function cleanup {
 	log_must $RM $TESTDIR/myfile.$$
 }
 
-function get_pool_size	{
+function get_pool_size {
 	poolname=$1
-	psize=$( $ZPOOL list -H -o used $poolname )
+	psize=$($ZPOOL list -H -o allocated $poolname)
 	if [[ $psize == *[mM] ]]
 	then
-		returnvalue=$($ECHO $psize | $SED -e 's/m//g' -e 's/M//g')	
-		returnvalue=$(( returnvalue * 1024 ))
+		returnvalue=$($ECHO $psize | $SED -e 's/m//g' -e 's/M//g')
+		returnvalue=$((returnvalue * 1024))
 	else
-		returnvalue=$($ECHO $psize | $SED -e 's/k//g' -e 's/K//g')	
+		returnvalue=$($ECHO $psize | $SED -e 's/k//g' -e 's/K//g')
 	fi
 	echo $returnvalue
 }
@@ -66,34 +70,30 @@ if is_global_zone
 then
 	# get pool and filesystem sizes. Since we're starting with an empty
 	# pool, the usage should be small - a few k.
-	POOL_SIZE=$(get_pool_size $TESTPOOL) 
+	POOL_SIZE=$(get_pool_size $TESTPOOL)
 fi
 
-FS_SIZE=$( $ZFS get -p -H -o value used $TESTPOOL/$TESTFS )
+FS_SIZE=$($ZFS get -p -H -o value used $TESTPOOL/$TESTFS)
 
 log_must $RUNAT $TESTDIR/myfile.$$ $MKFILE 200m xattr
 
-#Make sure the newly created file is counted into zpool usage 
+#Make sure the newly created file is counted into zpool usage
 log_must $SYNC
 
 # now check to see if our pool disk usage has increased
 if is_global_zone
 then
-	NEW_POOL_SIZE=$(get_pool_size $TESTPOOL) 
-	if (( $NEW_POOL_SIZE <= $POOL_SIZE ))
-	then
-		log_fail "The new pool size $NEW_POOL_SIZE was less \
-                than or equal to the old pool size $POOL_SIZE."
-	fi
+	NEW_POOL_SIZE=$(get_pool_size $TESTPOOL)
+	(($NEW_POOL_SIZE <= $POOL_SIZE)) && \
+	    log_fail "The new pool size $NEW_POOL_SIZE was less \
+            than or equal to the old pool size $POOL_SIZE."
 
 fi
 
 # also make sure our filesystem usage has increased
-NEW_FS_SIZE=$( $ZFS get -p -H -o value used $TESTPOOL/$TESTFS )
-if (( $NEW_FS_SIZE <= $FS_SIZE ))
-then
-	log_fail "The new filesystem size $NEW_FS_SIZE was less \
-		than or equal to the old filesystem size $FS_SIZE."
-fi
+NEW_FS_SIZE=$($ZFS get -p -H -o value used $TESTPOOL/$TESTFS)
+(($NEW_FS_SIZE <= $FS_SIZE)) && \
+    log_fail "The new filesystem size $NEW_FS_SIZE was less \
+    than or equal to the old filesystem size $FS_SIZE."
 
 log_pass "xattr file sizes count towards normal disk usage"

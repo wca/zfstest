@@ -23,6 +23,10 @@
 # Use is subject to license terms.
 #
 
+#
+# Copyright (c) 2012 by Delphix. All rights reserved.
+#
+
 . $STF_SUITE/include/libtest.kshlib
 . $STF_SUITE/tests/functional/xattr/xattr_common.kshlib
 
@@ -30,7 +34,7 @@
 # DESCRIPTION:
 #
 # Basic applications work with xattrs: cpio cp find mv pax tar
-# 
+#
 # STRATEGY:
 #	1. For each application
 #       2. Create an xattr and archive/move/copy/find files with xattr support
@@ -103,15 +107,11 @@ log_must $MKDIR $TESTDIR/noxattrs
 log_must $TOUCH $TESTDIR/noxattrs/no-xattr
 
 $FIND $TESTDIR -xattr | $GREP myfile.$$
-if [ $? -ne 0 ]
-then
+[[ $? -ne 0 ]] && \
 	log_fail "find -xattr didn't find our file that had an xattr."
-fi
 $FIND $TESTDIR -xattr | $GREP no-xattr
-if [ $? -eq 0 ]
-then
+[[ $? -eq 0 ]] && \
 	log_fail "find -xattr found a file that didn't have an xattr."
-fi
 log_must $RM -rf $TESTDIR/noxattrs
 
 
@@ -136,7 +136,7 @@ log_must $RM $TESTDIR/pax.$$
 # we should have no xattr here
 log_must $PAX -r -f $TESTDIR/noxattr.pax
 log_mustnot eval "$RUNAT $TESTDIR/pax.$$ $CAT passwd > /dev/null 2>&1"
-log_must $RM $TESTDIR/pax.$$ 
+log_must $RM $TESTDIR/pax.$$
 
 # we should have no xattr here
 log_must $PAX -r@ -f $TESTDIR/noxattr.pax
@@ -150,7 +150,7 @@ verify_xattr $TESTDIR/pax.$$ passwd /etc/passwd
 log_must $RM $TESTDIR/pax.$$
 
 # we should have no xattr here
-log_must $PAX -r -f $TESTDIR/xattr.pax
+log_must $PAX -r -f $TESTDIR/xattr.pax $TESTDIR
 log_mustnot eval "$RUNAT $TESTDIR/pax.$$ $CAT passwd > /dev/null 2>&1"
 log_must $RM $TESTDIR/pax.$$ $TESTDIR/noxattr.pax $TESTDIR/xattr.pax
 
@@ -158,18 +158,21 @@ log_must $RM $TESTDIR/pax.$$ $TESTDIR/noxattr.pax $TESTDIR/xattr.pax
 log_note "Checking tar"
 log_must $TOUCH $TESTDIR/tar.$$
 create_xattr $TESTDIR/tar.$$ passwd /etc/passwd
-log_must $TAR cf $TESTDIR/noxattr.tar $TESTDIR/tar.$$
-log_must $TAR c@f $TESTDIR/xattr.tar $TESTDIR/tar.$$
+
+log_must cd $TESTDIR
+
+log_must $TAR cf noxattr.tar tar.$$
+log_must $TAR c@f xattr.tar tar.$$
 log_must $RM $TESTDIR/tar.$$
 
 # we should have no xattr here
-log_must $TAR xf $TESTDIR/xattr.tar
+log_must $TAR xf xattr.tar
 log_mustnot eval "$RUNAT $TESTDIR/tar.$$ $CAT passwd > /dev/null 2>&1"
 log_must $RM $TESTDIR/tar.$$
 
 # we should have an xattr here
-log_must $TAR x@f $TESTDIR/xattr.tar
-verify_xattr $TESTDIR/tar.$$ passwd /etc/passwd
+log_must $TAR x@f xattr.tar
+verify_xattr tar.$$ passwd /etc/passwd
 log_must $RM $TESTDIR/tar.$$
 
 # we should have no xattr here

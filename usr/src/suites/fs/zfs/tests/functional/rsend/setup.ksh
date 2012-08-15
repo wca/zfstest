@@ -33,7 +33,7 @@ verify_disk_count "$DISKS" 2
 #
 # Check if the system support 'send -R'
 #
-$ZFS send 2>&1 | grep -w "[-R]" > /dev/null 2>&1
+$ZFS send 2>&1 | $GREP "\[-[a-zA-Z]*R[a-zA-Z]*\]" >/dev/null 2>&1
 if (($? != 0)); then
 	log_unsupported
 fi

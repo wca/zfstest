@@ -1021,12 +1021,12 @@ function is_global_zone
 }
 
 #
-# Verify whether test is permit to run from
+# Verify whether test is permitted to run from
 # global zone, local zone, or both
 #
 # $1 zone limit, could be "global", "local", or "both"(no limit)
 #
-# Return 0 if permit, otherwise exit with log_unsupported
+# Return 0 if permitted, otherwise exit with log_unsupported
 #
 function verify_runnable # zone limit
 {
@@ -1039,12 +1039,12 @@ function verify_runnable # zone limit
 			global|both)
 				break
 				;;
-			local)  log_unsupported "Test is unable to run from \
-					global zone."
+			local)	log_unsupported "Test is unable to run from "\
+					"global zone."
 				break
 				;;
-			*)      log_note "Warning: unknown limit $limit - " \
-				    "use both."
+			*)	log_note "Warning: unknown limit $limit - " \
+					"use both."
 				;;
 		esac
 	else
@@ -1052,12 +1052,12 @@ function verify_runnable # zone limit
 			local|both)
 				break
 				;;
-			global) log_unsupported "Test is unable to run from \
-					local zone."
+			global)	log_unsupported "Test is unable to run from "\
+					"local zone."
 				break
 				;;
-			*)      log_note "Warning: unknown limit $limit - " \
-				    "use both."
+			*)	log_note "Warning: unknown limit $limit - " \
+					"use both."
 				;;
 		esac
 
@@ -2622,3 +2622,17 @@ function ds_is_snapshot
 	[[ $type = "snapshot" ]] && return 0
 	return 1
 }
+
+#
+# Check if Trusted Extensions are installed and enabled
+#
+function is_te_enabled
+{
+	$SVCS -H -o state labeld 2>/dev/null | $GREP "enabled"
+	if (($? != 0)); then
+		return 1
+	else
+		return 0
+	fi
+}
+

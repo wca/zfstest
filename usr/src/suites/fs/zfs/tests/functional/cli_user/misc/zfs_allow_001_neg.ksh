@@ -48,7 +48,7 @@ fi
 log_assert "zfs allow returns an error when run as a user"
 
 log_must $ZFS allow $TESTPOOL/$TESTFS
-log_mustnot $ZFS allow $LOGNAME create $TESTPOOL/$TESTFS
+log_mustnot $ZFS allow $($LOGNAME) create $TESTPOOL/$TESTFS
 
 # now verify that the above command actually did nothing by
 # checking for any allow output. ( if no allows are granted,

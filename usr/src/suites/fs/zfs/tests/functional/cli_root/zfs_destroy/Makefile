@@ -42,7 +42,10 @@ STF_ROOT_TESTCASES=zfs_destroy_001_pos \
 	zfs_destroy_007_neg \
 	zfs_destroy_008_pos \
 	zfs_destroy_009_pos \
-	zfs_destroy_010_pos
+	zfs_destroy_010_pos \
+	zfs_destroy_011_pos \
+	zfs_destroy_012_pos \
+	zfs_destroy_013_neg
 STF_USER_TESTCASES=
 
 STF_ENVFILES=zfs_destroy.cfg

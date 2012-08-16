@@ -40,7 +40,7 @@
 #
 ################################################################################
 
-log_assert "'zfs destroy -d <snap>' marks snapshot for deferred destroy"
+log_assert "'zfs destroy -d <snap>' marks cloned snapshot for deferred destroy"
 log_onexit cleanup_testenv
 
 setup_testenv clone
@@ -50,10 +50,10 @@ for dstype in FS VOL; do
     clone=$(eval echo \$${dstype}CLONE)
     log_must $ZFS destroy -d $snap
     log_must datasetexists $snap
-    log_must eval "$ZFS list -Ho defer_destroy $snap | $GREP on"
+    log_must eval "[[ $(get_prop defer_destroy $snap) == 'on' ]]"
     log_must $ZFS destroy $clone
     log_mustnot datasetexists $snap
     log_mustnot datasetexists $clone
 done
 
-log_pass "'zfs destroy -d <snap>' marks snapshot for deferred destroy"
+log_pass "'zfs destroy -d <snap>' marks cloned snapshot for deferred destroy"

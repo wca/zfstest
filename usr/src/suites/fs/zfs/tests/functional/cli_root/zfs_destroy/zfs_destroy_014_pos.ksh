@@ -1,4 +1,4 @@
-#!/bin/ksh -p
+#!/bin/bash -p
 #
 # CDDL HEADER START
 #
@@ -18,7 +18,7 @@
 # Copyright (c) 2012 by Delphix. All rights reserved.
 #
 
-. $STF_SUITE/include/libtest.kshlib
+. $STF_SUITE/include/libtest.shlib
 
 #
 # DESCRIPTION:

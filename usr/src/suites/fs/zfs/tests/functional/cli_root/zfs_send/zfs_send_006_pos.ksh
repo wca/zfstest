@@ -18,7 +18,7 @@
 # Copyright (c) 2012 by Delphix. All rights reserved.
 #
 
-. $STF_SUITE/include/libtest.kshlib
+. $STF_SUITE/include/libtest.shlib
 #
 # DESCRIPTION:
 #	Verify 'zfs send' can generate valid streams with different options

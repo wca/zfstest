@@ -37,12 +37,12 @@ STF_ROOT_TESTCASES=zfs_clone_001_neg zfs_clone_002_pos \
 		zfs_clone_003_pos zfs_clone_004_pos \
 		zfs_clone_005_pos zfs_clone_006_pos \
 		zfs_clone_007_pos zfs_clone_008_neg \
-		zfs_clone_009_neg
+		zfs_clone_009_neg zfs_clone_010_pos
 
 STF_USER_TESTCASES=
 
 STF_ENVFILES=zfs_clone.cfg
 
 STF_DONTBUILDMODES=true
- 
+
 include $(STF_TOOLS)/Makefiles/Makefile.master

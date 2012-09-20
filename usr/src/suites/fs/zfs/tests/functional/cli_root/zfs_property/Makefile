@@ -33,7 +33,7 @@ STF_USER_SETUP=
 STF_ROOT_CLEANUP=cleanup
 STF_USER_CLEANUP=
 
-STF_ROOT_TESTCASES=zfs_set_property_001_pos
+STF_ROOT_TESTCASES=zfs_written_property_001_pos
 STF_USER_TESTCASES=
 
 STF_ENVFILES=zfs_property.cfg

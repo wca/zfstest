@@ -23,6 +23,9 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+#
+# Copyright (c) 2012 by Delphix. All rights reserved.
+#
 
 STF_ROOT_CONFIGURE=
 STF_USER_CONFIGURE=
@@ -49,7 +52,7 @@ STF_BUILD_SUBDIRS=zdb \
    zpool_destroy zpool_detach zpool_export zpool_import \
    zpool_history zpool_offline zpool_online zpool_replace \
    zpool_scrub zpool_status zpool_upgrade zpool_set zpool_get \
-   zpool_remove zpool_expand
+   zpool_remove zpool_expand zfs_property
 
 STF_EXECUTE_SUBDIRS=zdb \
    zfs zfs_send zfs_clone zfs_create zfs_copies zfs_destroy zfs_get \
@@ -60,7 +63,7 @@ STF_EXECUTE_SUBDIRS=zdb \
    zpool_destroy zpool_detach zpool_export zpool_import \
    zpool_history zpool_offline zpool_online zpool_replace \
    zpool_scrub zpool_status zpool_upgrade zpool_set zpool_get \
-   zpool_remove zpool_expand
+   zpool_remove zpool_expand zfs_property
 
 STF_ENVFILES=cli.cfg
 STF_INCLUDES=cli_common.kshlib

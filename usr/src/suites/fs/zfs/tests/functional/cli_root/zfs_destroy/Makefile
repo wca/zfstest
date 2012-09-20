@@ -23,6 +23,9 @@
 # Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+#
+# Copyright (c) 2012 by Delphix. All rights reserved.
+#
 
 STF_ROOT_CONFIGURE=
 STF_USER_CONFIGURE=
@@ -46,7 +49,8 @@ STF_ROOT_TESTCASES=zfs_destroy_001_pos \
 	zfs_destroy_011_pos \
 	zfs_destroy_012_pos \
 	zfs_destroy_013_neg \
-	zfs_destroy_014_pos
+	zfs_destroy_014_pos \
+	zfs_destroy_015_pos
 STF_USER_TESTCASES=
 
 STF_ENVFILES=zfs_destroy.cfg

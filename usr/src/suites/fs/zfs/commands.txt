@@ -170,7 +170,8 @@
 /usr/sbin/zonecfg
 /usr/sbin/zlogin
 /usr/bin/zonename
-
+/usr/bin/bc
+/usr/bin/python
 # ZFS Commands
 /usr/sbin/zdb
 /usr/sbin/zhack

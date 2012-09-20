@@ -37,11 +37,12 @@ STF_USER_CLEANUP=
 STF_ROOT_TESTCASES=zfs_snapshot_001_neg zfs_snapshot_002_neg \
 		   zfs_snapshot_003_neg zfs_snapshot_004_neg \
 		   zfs_snapshot_005_neg zfs_snapshot_006_pos \
-		   zfs_snapshot_007_neg zfs_snapshot_008_neg
+		   zfs_snapshot_007_neg zfs_snapshot_008_neg \
+		   zfs_snapshot_009_pos
 STF_USER_TESTCASES=
 
 STF_ENVFILES=zfs_snapshot.cfg
 
 STF_DONTBUILDMODES=true
- 
+
 include $(STF_TOOLS)/Makefiles/Makefile.master

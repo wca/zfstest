@@ -24,10 +24,14 @@
 # Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-. $STF_SUITE/include/libtest.kshlib
+#
+# Copyright (c) 2012 by Delphix. All rights reserved.
+#
+
+. $STF_SUITE/include/libtest.shlib
 
 #
-# DESCRIPTION: 
+# DESCRIPTION:
 #	Try each 'zfs snapshot' with inapplicable scenarios to make sure
 #	it returns an error. include:
 #		* No arguments given.
@@ -37,10 +41,10 @@
 #		* Missing '@' delimiter.
 #		* Multiple '@' delimiters in snapshot name.
 #		* The snapshot already exist.
-#		* Create snapshot upon the pool. 
+#		* Create snapshot upon the pool.
 #			(Be removed since pool is treated as filesystem as well)
 #		* Create snapshot upon a non-existent filesystem.
-#		* Too many arguments. 
+#		* Too many arguments.
 #
 # STRATEGY:
 #	1. Create an array of parameters
@@ -60,8 +64,7 @@ set -A args "" \
 	"$TESTPOOL/$TESTFS@$TESTSNAP@$TESTSNAP1" \
 	"$TESTPOOL/$TESTVOL@$TESTSNAP@$TESTSNAP1" \
 	"$SNAPFS" "$SNAPFS1" \
-	"blah/blah@$TESTSNAP" \
-	"$TESTPOOL/$TESTFS@$TESTSNAP1 $TESTPOOL/$TESTVOL@$TESTSNAP1"
+	"blah/blah@$TESTSNAP"
 
 
 
@@ -81,37 +84,28 @@ function setup_all
 function cleanup_all
 {
 	typeset -i i=0
-	
 	while (( i < ${#args[*]} )); do
-
 		for snap in ${args[i]}; do
-        		snapexists $snap && \
-				log_must $ZFS destroy -f $snap
-
+			snapexists $snap && \
+			    log_must $ZFS destroy -f $snap
 		done
-
 		(( i = i + 1 ))
 	done
-
-	for mtpt in $SNAPDIR $SNAPDIR1 ; do
+	for mtpt in $SNAPDIR $SNAPDIR1; do
 		[[ -d $mtpt ]] && \
-			log_must $RM -rf $mtpt
+		    log_must $RM -rf $mtpt
 	done
-
 	return 0
 }
 
 log_assert "Badly-formed 'zfs snapshot' with inapplicable scenarios " \
 	"should return an error."
 log_onexit cleanup_all
-
 setup_all
-
 typeset -i i=0
 while (( i < ${#args[*]} )); do
 	log_mustnot $ZFS snapshot ${args[i]}
 	((i = i + 1))
 done
-
 log_pass "Badly formed 'zfs snapshot' with inapplicable scenarios " \
 	"fail as expected."

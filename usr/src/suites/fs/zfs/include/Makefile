@@ -1,4 +1,4 @@
-#
+# 
 # CDDL HEADER START
 #
 # The contents of this file are subject to the terms of the
@@ -15,7 +15,7 @@
 # If applicable, add the following below this CDDL HEADER, with the
 # fields enclosed by brackets "[]" replaced with your own identifying
 # information: Portions Copyright [yyyy] [name of copyright owner]
-#
+# 
 # CDDL HEADER END
 #
 
@@ -26,6 +26,6 @@
 # Copyright (c) 2012 by Delphix. All rights reserved.
 #
 
-STF_INCLUDES=libtest.kshlib libtest.shlib libremote.kshlib
+STF_INCLUDES=libtest.kshlib libtest.shlib libremote.kshlib math.shlib
 STF_DONTBUILDMODES=true
 include ${STF_TOOLS}/Makefiles/Makefile.master

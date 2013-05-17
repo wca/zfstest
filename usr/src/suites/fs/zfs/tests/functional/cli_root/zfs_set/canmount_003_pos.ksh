@@ -75,7 +75,7 @@ function cleanup
 		log_must $ZFS destroy -R $TESTPOOL/$TESTFS@$TESTSNAP
 	fi
 
-	$ZFS unmount -a > /dev/null 2>&1
+	unmount_all_safe > /dev/null 2>&1
 	log_must $ZFS mount -a
 }
 

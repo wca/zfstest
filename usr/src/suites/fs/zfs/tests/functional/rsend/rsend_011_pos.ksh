@@ -41,7 +41,7 @@ verify_runnable "both"
 
 function cleanup
 {
-	$ZFS unmount -a > /dev/null 2>&1
+	unmount_all_safe > /dev/null 2>&1
 	log_must cleanup_pool $POOL
 	log_must cleanup_pool $POOL2
 

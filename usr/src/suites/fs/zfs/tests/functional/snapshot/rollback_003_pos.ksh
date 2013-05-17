@@ -86,7 +86,7 @@ log_note "Verify rollback of multiple nested file systems succeeds."
 log_must $ZFS snapshot $TESTPOOL/$TESTFILE@$TESTSNAP
 log_must $ZFS snapshot $SNAPPOOL.1
 
-$ZFS unmount -a > /dev/null 2>&1
+unmount_all_safe > /dev/null 2>&1
 log_must $ZFS mount -a
 
 log_must $TOUCH /$TESTPOOL/$TESTFILE/$TESTFILE.1

@@ -2636,3 +2636,14 @@ function is_te_enabled
 	fi
 }
 
+#
+# Unmount all ZFS filesystems except for those that are in the KEEP variable
+#
+function unmount_all_safe
+{
+	EGREP_KEEP=`echo $KEEP | tr ' ' '|'`
+	$ZPOOL list -H -o name | \
+		$EGREP -v "^($EGREP_KEEP)$" | \
+		$XARGS -n 1 $ZFS list -H -o name -t all -r | \
+		$XARGS -n 1 $ZFS unmount
+}

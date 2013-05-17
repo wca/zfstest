@@ -172,6 +172,8 @@
 /usr/bin/zonename
 /usr/bin/bc
 /usr/bin/python
+/usr/bin/xargs
+
 # ZFS Commands
 /usr/sbin/zdb
 /usr/sbin/zhack

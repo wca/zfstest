@@ -40,7 +40,7 @@ $ZFS unshare -a
 ret=$?
 (( $ret != 0 )) && _err_exit $ret \
 	"Unsharing all zfs filesystems failed."
-$ZFS unmount -a > /dev/null 2>&1
+unmount_all_safe > /dev/null 2>&1
 
 $ZPOOL list -H $RTESTPOOL >/dev/null 2>&1
 if (( $? == 0 )); then

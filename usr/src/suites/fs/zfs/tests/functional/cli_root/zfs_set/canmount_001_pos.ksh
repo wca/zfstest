@@ -71,7 +71,7 @@ function cleanup
 	[[ -n $old_fs_canmount ]] && \
 		log_must $ZFS set canmount=$old_fs_canmount $TESTPOOL/$TESTFS
 
-	$ZFS unmount -a > /dev/null 2>&1
+	unmount_all_safe > /dev/null 2>&1
 	log_must $ZFS mount -a
 }
 

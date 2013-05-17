@@ -52,22 +52,22 @@ log_assert "Test properties are inherited correctly"
 # Simple function to create specified datasets.
 #
 function create_dataset { #name type disks
-        typeset dataset=$1
-        typeset type=$2
-        typeset disks=$3
+	typeset dataset=$1
+	typeset type=$2
+	typeset disks=$3
 
-        if [[ $type == "POOL" ]]; then
-                create_pool "$dataset" "$disks"
-        elif [[ $type == "CTR" ]]; then
-                log_must $ZFS create $dataset
+	if [[ $type == "POOL" ]]; then
+		create_pool "$dataset" "$disks"
+	elif [[ $type == "CTR" ]]; then
+		log_must $ZFS create $dataset
 		log_must $ZFS set canmount=off $dataset
-        elif [[ $type == "FS" ]]; then
-                log_must $ZFS create $dataset
-        else
-                log_fail "Unrecognised type $type"
-        fi
+	elif [[ $type == "FS" ]]; then
+		log_must $ZFS create $dataset
+	else
+		log_fail "Unrecognised type $type"
+	fi
 
-        list="$list $dataset"
+	list="$list $dataset"
 }
 
 #
@@ -75,8 +75,8 @@ function create_dataset { #name type disks
 # dataset, setting them to a 'local' value if required.
 #
 function init_props { #dataset init_code
-        typeset dataset=$1
-        typeset init_code=$2
+	typeset dataset=$1
+	typeset init_code=$2
 	typeset dir=$3
 
 	typeset -i i=0
@@ -86,19 +86,19 @@ function init_props { #dataset init_code
 	# call them out via a log_note to aid in debugging the
 	# config files
 	#
-        if [[ $init_code == "-" ]]; then
-                log_note "Leaving properties for $dataset unchanged."
+	if [[ $init_code == "-" ]]; then
+		log_note "Leaving properties for $dataset unchanged."
 		[[ $def_recordsize == 0 ]] && \
 		    update_recordsize $dataset $init_code
-                return;
-        elif [[ $init_code == "default" ]]; then
-                log_note "Leaving properties for $dataset at default values."
+		return;
+	elif [[ $init_code == "default" ]]; then
+		log_note "Leaving properties for $dataset at default values."
 		[[ $def_recordsize == 0 ]] && \
 		    update_recordsize $dataset $init_code
-                return;
-        elif [[ $init_code == "local" ]]; then
-                log_note "Setting properties for $dataset to local values."
-                while (( i <  ${#prop[*]} )); do
+		return;
+	elif [[ $init_code == "local" ]]; then
+		log_note "Setting properties for $dataset to local values."
+		while (( i <  ${#prop[*]} )); do
 			if [[ ${prop[i]} == "recordsize" ]]; then
 				update_recordsize $dataset $init_code
 			else
@@ -111,9 +111,9 @@ function init_props { #dataset init_code
 				fi
 			fi
 
-                        ((i = i + 2))
-                done
-        else
+			((i = i + 2))
+		done
+	else
 		log_fail "Unrecognised init code $init_code"
 	fi
 }
@@ -174,11 +174,11 @@ function update_recordsize { #dataset init_code
 #
 function get_mntpt_val #dataset src index
 {
-        typeset dataset=$1
-        typeset src=$2
-        typeset idx=$3
-        typeset new_path=""
-        typeset dset
+	typeset dataset=$1
+	typeset src=$2
+	typeset idx=$3
+	typeset new_path=""
+	typeset dset
 	typeset mntpt=""
 
 	if [[ $src == "local" ]]; then
@@ -274,13 +274,13 @@ function scan_config { #config-file
 	list=""
 	typeset -i mount_dir=1
 
-        grep "^[^#]" $config_file | {
-                while read name type init ; do
-                        create_dataset $name $type $DISK
-                        init_props $name $init $mount_dir
+	grep "^[^#]" $config_file | {
+		while read name type init ; do
+			create_dataset $name $type $DISK
+			init_props $name $init $mount_dir
 			((mount_dir = mount_dir + 1))
-                done
-        }
+		done
+	}
 }
 
 #
@@ -306,13 +306,13 @@ function check_failure { # int status, error message to use
 #
 function scan_state { #state-file
 	typeset state_file=$1
-        typeset -i i=0
-        typeset -i j=0
+	typeset -i i=0
+	typeset -i j=0
 
 	log_note "Reading state from $state_file"
 
-        while ((i <  ${#prop[*]})); do
-                grep "^[^#]" $state_file | {
+	while ((i <  ${#prop[*]})); do
+		grep "^[^#]" $state_file | {
 			while IFS=: read target op; do
 				#
 				# The user can if they wish specify that no
@@ -332,7 +332,10 @@ function scan_state { #state-file
 				if [[ $op == "-" ]]; then
 					log_note "No operation specified"
 				else
-					$ZFS unmount -a > /dev/null 2>&1
+					# Unmount the test datasets if they
+					# are still mounted.  Most often, they
+					# won't be, so discard the output
+					unmount_all_safe > /dev/null 2>&1
 
 					for p in ${prop[i]} ${prop[((i+1))]}; do
 						$ZFS $op $p $target
@@ -341,8 +344,8 @@ function scan_state { #state-file
 						    $target"
 					done
 				fi
-                                for check_obj in $list; do
-                                        read init_src final_src
+				for check_obj in $list; do
+					read init_src final_src
 
 					for p in ${prop[i]} ${prop[((i+1))]}; do
 					# check_failure to keep journal small
@@ -361,12 +364,12 @@ function scan_state { #state-file
 						    "_prop_val $check_obj $p" \
 						    "$final_src"
 					done
-                                done
-                        done
-                }
-                ((i = i + 2))
-                ((j = j + 1))
-        done
+				done
+			done
+		}
+		((i = i + 2))
+		((j = j + 1))
+	done
 }
 
 
@@ -375,7 +378,7 @@ set -A prop "checksum" "" \
 	"atime" "" \
 	"devices" "" \
 	"exec" "" \
-        "setuid" "" \
+	"setuid" "" \
 	"sharenfs" "" \
 	"recordsize" "recsize" \
 	"mountpoint" "" \
